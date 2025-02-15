@@ -66,13 +66,16 @@ jobs:
         run: |
           dotnet restore ./src/ApiGitAction.csproj
           dotnet test ./tests/ApiGitAction.Tests.csproj --configuration Release --collect:"XPlat Code Coverage"
-
+          
       # Gerar e exibir relatório de cobertura
       - name: Generate coverage report
         run: |
           # Gerar relatório em formato cobertura
           dotnet tool install --global coverlet.console
-          coverlet ./tests/bin/Release/net8.0/ApiGitAction.Tests.dll --target "dotnet" --targetargs "test" --format "lcov" --output "./coverage.lcov"
+          coverlet ./tests/bin/Release/net8.0/ApiGitAction.Tests.dll \
+            --target "dotnet" \
+            --targetargs "test /home/runner/work/ApiGitAction/ApiGitAction/tests/ApiGitAction.Tests.csproj --no-build --configuration Release" \
+            --format cobertura
 
       - name: Upload coverage results
         uses: codecov/codecov-action@v3
