@@ -118,12 +118,9 @@ jobs:
         - name: Install coverlet
           run: dotnet tool install --global coverlet.console
         
-        - name: List Test R esults
-          run: ls -R ./tests/TestResults/
-        
         - name: Convert coverage results
           run: |
-            report=$(find ./tests/TestResults -name '*.coverage' | head -n 1)
+            report=$(find ./tests/TestResults -name '*.cobertura.xml' | head -n 1)
             echo "Found coverage file: $report"
             dotnet tool install -g dotnet-reportgenerator-globaltool
             reportgenerator -reports:$report -targetdir:./tests/TestResults/coverage -reporttypes:Cobertura
