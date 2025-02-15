@@ -117,7 +117,10 @@ jobs:
         
         - name: Install coverlet
           run: dotnet tool install --global coverlet.console
-
+        
+        - name: List files in the directory
+          run: ls -la ./tests/TestResults/
+        
         - name: Generate coverage report
           run: |
             coverlet ./tests/bin/Release/net8.0/ApiGitAction.Tests.dll \
