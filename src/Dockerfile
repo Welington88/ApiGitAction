@@ -9,6 +9,8 @@ WORKDIR /src
 COPY ["ApiGitAction.csproj", "."]
 RUN dotnet restore "./ApiGitAction.csproj"
 COPY . .
+RUN pwd
+RUN ls -l
 WORKDIR "/src/."
 RUN dotnet build "ApiGitAction.csproj" -c Release -o /app/build
 
