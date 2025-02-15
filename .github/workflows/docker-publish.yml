@@ -66,6 +66,7 @@ jobs:
         run: |
           dotnet restore ./src/ApiGitAction.csproj
           dotnet test ./tests/ApiGitAction.Tests.csproj --configuration Release --collect:"XPlat Code Coverage"
+          cd tests/bin/Release/net8.0/
           pwd
           ls -l
 
