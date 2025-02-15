@@ -72,7 +72,7 @@ jobs:
         run: |
           # Gerar relatório em formato cobertura
           dotnet tool install --global coverlet.console
-          coverlet ./tests/ApiGitAction.Tests/bin/Release/net7.0/ApiGitAction.Tests.dll --target "dotnet" --targetargs "test" --format "lcov" --output "./coverage.lcov"
+          coverlet ./tests/ApiGitAction.Tests/bin/Release/net8.0/ApiGitAction.Tests.dll --target "dotnet" --targetargs "test" --format "lcov" --output "./coverage.lcov"
 
       - name: Upload coverage results
         uses: codecov/codecov-action@v3
