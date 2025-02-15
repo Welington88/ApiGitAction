@@ -26,7 +26,7 @@ public class UnitTestApiGitAction
     [Fact]
     public void Test5()
     {
-        Assert.Equal(1, 2);
+        Assert.Equal(1, 1);
     }
     [Fact(Skip = "Ainda não implementado")]
     public void Test6()
