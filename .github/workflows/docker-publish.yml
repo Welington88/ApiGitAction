@@ -124,18 +124,19 @@ jobs:
               --target "dotnet" \
               --targetargs "test /home/runner/work/ApiGitAction/ApiGitAction/tests/ApiGitAction.Tests.csproj --no-build --configuration Release" \
               --format cobertura
-              - name: Check coverage percentage
-              run: |
-                # Usando `xmllint` para obter a cobertura do relatório em formato Cobertura XML
-                coverage=$(xmllint --xpath "string(//coverage/@line-rate)" coverage.xml)
-                echo "Coverage: $coverage"
+
+        - name: Check coverage percentage
+          run: |
+            # Usando xmllint para verificar a cobertura
+            coverage=$(xmllint --xpath "string(//coverage/@line-rate)" coverage.xml)
+            echo "Coverage: $coverage"
         
-                # Verificando se a cobertura está abaixo de 80%
-                if (( $(echo "$coverage < 0.80" | bc -l) )); then
-                  echo "Code coverage is below 80%. Failing the build."
-                  exit 1
-                fi
-                
+            # Verificando se a cobertura está abaixo de 80%
+            if (( $(echo "$coverage < 0.80" | bc -l) )); then
+              echo "Code coverage is below 80%. Failing the build."
+              exit 1
+            fi
+
         - name: Upload coverage results
           uses: codecov/codecov-action@v3
           with:
