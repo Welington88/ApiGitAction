@@ -67,6 +67,7 @@ jobs:
           dotnet restore ./src/ApiGitAction.csproj
           dotnet test ./tests/ApiGitAction.Tests.csproj --configuration Release --collect:"XPlat Code Coverage"
           pwd
+          ls -l
 
       # Gerar e exibir relatório de cobertura
       - name: Generate coverage report
