@@ -24,7 +24,6 @@ env:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -60,27 +59,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      # Rodar testes e gerar cobertura
-      - name: Run tests and generate code coverage
-        run: |
-          dotnet restore ./src/ApiGitAction.csproj
-          dotnet test ./tests/ApiGitAction.Tests.csproj --configuration Release --collect:"XPlat Code Coverage"
-          
-      # Gerar e exibir relatório de cobertura
-      - name: Generate coverage report
-        run: |
-          # Gerar relatório em formato cobertura
-          dotnet tool install --global coverlet.console
-          coverlet ./tests/bin/Release/net8.0/ApiGitAction.Tests.dll \
-            --target "dotnet" \
-            --targetargs "test /home/runner/work/ApiGitAction/ApiGitAction/tests/ApiGitAction.Tests.csproj --no-build --configuration Release" \
-            --format cobertura
-
-      - name: Upload coverage results
-        uses: codecov/codecov-action@v3
-        with:
-          file: ./coverage.lcov
 
       # Extract metadata (tags, labels) for Docker
       # https://github.com/docker/metadata-action
@@ -118,3 +96,36 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+  
+  test:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: '8.0.x'
+
+        - name: Restore dependencies
+          run: dotnet restore ./src/ApiGitAction.csproj
+
+        - name: Run tests
+          run: |
+            dotnet test ./tests/ApiGitAction.Tests.csproj --configuration Release --collect:"XPlat Code Coverage"
+        
+        - name: Install coverlet
+          run: dotnet tool install --global coverlet.console
+
+        - name: Generate coverage report
+          run: |
+            coverlet ./tests/bin/Release/net8.0/ApiGitAction.Tests.dll \
+              --target "dotnet" \
+              --targetargs "test /home/runner/work/ApiGitAction/ApiGitAction/tests/ApiGitAction.Tests.csproj --no-build --configuration Release" \
+              --format cobertura
+
+        - name: Upload coverage results
+          uses: codecov/codecov-action@v3
+          with:
+            file: ./coverage.lcov
